@@ -1,22 +1,22 @@
-import { Box, Button, InputBase, TextField } from "@mui/material";
-import React, { useState, useRef } from "react";
-import { S3 } from "aws-sdk";
-import Paper from "@mui/material/Paper";
-import AddIcon from "@mui/icons-material/Add";
-import SendIcon from "@mui/icons-material/Send";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
+import { Box, Button, InputBase, TextField } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { S3 } from 'aws-sdk';
+import Paper from '@mui/material/Paper';
+import AddIcon from '@mui/icons-material/Add';
+import SendIcon from '@mui/icons-material/Send';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
 
 export default function ChatInputBox({ handleSendMessage }) {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
   // create an object of s3
   const s3 = new S3({
-    region: "us-east-2",
-    accessKeyId: "AKIA47CRWPBC5DXP6GPQ",
-    secretAccessKey: "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",
+    region: 'us-east-2',
+    accessKeyId: '{key}',
+    secretAccessKey: '{key}',
   });
 
   // when user uploads the file call this function
@@ -29,18 +29,18 @@ export default function ChatInputBox({ handleSendMessage }) {
   const uploadFileToS3 = (file) => {
     return new Promise((resolve, reject) => {
       const uploadParams = {
-        Bucket: "medhubchat",
+        Bucket: 'medhubchat',
         Key: `chat-uploads/${file.name}`,
         Body: file,
-        ACL: "public-read",
+        ACL: 'public-read',
       };
 
       s3.upload(uploadParams, (err, data) => {
         if (err) {
-          console.error("Error uploading to S3:", err);
+          console.error('Error uploading to S3:', err);
           reject(err);
         } else {
-          console.log("Upload successful:", data);
+          console.log('Upload successful:', data);
           resolve(data.Location); // Resolve with the URL of the uploaded file
         }
       });
@@ -57,7 +57,7 @@ export default function ChatInputBox({ handleSendMessage }) {
         // Send the S3 file URL as a message
         handleSendMessage(fileUrl);
       } catch (error) {
-        console.error("Failed to upload file:", error);
+        console.error('Failed to upload file:', error);
       }
     } else if (message) {
       // If there's a message, send it
@@ -65,7 +65,7 @@ export default function ChatInputBox({ handleSendMessage }) {
     }
 
     // Reset state
-    setMessage("");
+    setMessage('');
     setSelectedFile(null);
   };
 
@@ -77,16 +77,16 @@ export default function ChatInputBox({ handleSendMessage }) {
     <Paper
       component="form"
       sx={{
-        p: "2px 4px",
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
+        p: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
       }}
       onSubmit={handleSubmit}
     >
       <IconButton
         onClick={handleAddIconClick}
-        sx={{ p: "10px" }}
+        sx={{ p: '10px' }}
         aria-label="menu"
       >
         <AddIcon />
@@ -96,7 +96,7 @@ export default function ChatInputBox({ handleSendMessage }) {
         id="file-input"
         type="file"
         onChange={handleFileChange}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <InputBase
@@ -112,7 +112,7 @@ export default function ChatInputBox({ handleSendMessage }) {
       <IconButton
         type="submit"
         color="primary"
-        sx={{ p: "10px" }}
+        sx={{ p: '10px' }}
         aria-label="send"
       >
         <SendIcon />
